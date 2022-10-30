@@ -66,9 +66,9 @@ addTicketBtn.addEventListener("click", function(e){
     "imgUrl": ticketImgUrl.value,
     "area": ticketRegion.value,
     "description": ticketDescription.value,
-    "group": ticketNum.value,
-    "price": ticketPrice.value,
-    "rate": ticketRate.value
+    "group": parseInt(ticketNum.value),
+    "price": parseInt(ticketPrice.value),
+    "rate": parseInt(ticketRate.value)
   }
 
   data.push(obj)
