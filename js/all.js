@@ -93,6 +93,7 @@ addTicketBtn.addEventListener("click", function (e) {
 
   data.push(obj);
   ticketListRender(data);
+  c3jsRender();
   ticketForm.reset();
   regionSearch.value = ""; // 初始化搜尋地區 -> 全部地區
 });
@@ -231,6 +232,46 @@ function checkTicketInputSuccess() {
   return true;
 }
 
+function c3jsRender(){
+  const totalObj = {}
+
+  // 篩選地區，並累加數字上去
+  // totalObj 會變成 {高雄: 2, 台北: 1, 台中: 2}
+  data.forEach((item)=>{
+    if(totalObj[item.area] == undefined){
+      totalObj[item.area] = 1;
+    } else {
+      totalObj[item.area] += 1;
+    }
+  });
+  // console.log(totalObj);
+
+  // 組合成 C3js 規定的資料格式
+  // c3jsData = [["高雄", 2], ["台北",1], ["台中", 1]]
+  const c3jsData = [];
+  const area = Object.keys(totalObj);
+  area.forEach(item=>{
+    let array = [];
+    array.push(item);
+    array.push(totalObj[item]);
+    c3jsData.push(array);
+  })
+  // console.log(c3jsData);
+
+  // C3js render
+  // 將 newData 丟入 c3 產生器
+  const chart = c3.generate({
+    bindto: "#chart",
+    data: {
+      columns: c3jsData,
+      type : 'donut',
+    },
+    donut: {
+      title: "套票地區比重"
+    }
+  });
+}
+
 // getTravelData
 function getTravelData() {
   const url = `https://raw.githubusercontent.com/hexschool/js-training/main/travelApi.json`;
@@ -239,8 +280,9 @@ function getTravelData() {
     .get(url)
     .then((res) => {
       data = res.data.data;
-      console.log(data);
+      // console.log(data);
       ticketListRender(data);
+      c3jsRender();
     })
     .catch((err) => {
       console.log("取得旅遊資料發生錯誤!");

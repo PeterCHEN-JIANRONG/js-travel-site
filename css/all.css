@@ -450,3 +450,7 @@ body {
 .hidden {
   display: none;
 }
+
+.chart-wrap {
+  padding-top: 50px;
+}
